@@ -3,7 +3,6 @@ package powerdnsadmin
 import (
 	"fmt"
 	"log"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -48,6 +47,13 @@ func resourcePDNSAdminAPIKey() *schema.Resource {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
+				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+					role := strings.Title(strings.ToLower(d.Get("role").(string)))
+					if role != "User" {
+						return true
+					}
+					return false
+				},
 			},
 
 			"plain_text_key": {
@@ -68,20 +74,14 @@ func resourcePDNSAdminAPIKeyCreate(d *schema.ResourceData, meta interface{}) err
 
 	log.Printf("[DEBUG] Creating PowerDNS Admin API Key")
 
-	role := strings.Title(strings.ToLower(d.Get("role").(string)))
+	role := d.Get("role").(string)
 	setDomains := d.Get("domains").(*schema.Set).List()
 
 	if role == "User" && len(setDomains) == 0 {
 		return fmt.Errorf("API Key with a User role must have at least one domain")
 	} else if role != "User" && len(setDomains) > 0 {
-		setDomains = nil
+		setDomains = make([]interface{}, 0)
 	}
-
-	var sourceDomains []string
-	for _, d := range setDomains {
-		sourceDomains = append(sourceDomains, d.(string))
-	}
-	sort.Strings(sourceDomains)
 
 	var domains models.PDNSAdminZones
 	for _, domain := range setDomains {
@@ -120,21 +120,14 @@ func resourcePDNSAdminAPIKeyRead(d *schema.ResourceData, meta interface{}) error
 	}
 
 	d.Set("description", APIKey.Payload.Description)
-	d.Set("role", APIKey.Payload.Role)
+	d.Set("role", APIKey.Payload.Role.Name)
 	d.Set("hashed_key", APIKey.Payload.Key)
 
 	var domains []string
-	if d.Get("role").(string) != "User" {
-		domains := d.Get("domains")
-		//domains := []string{""}
-	} else {
-		if len(APIKey.Payload.Domains) > 0 {
-			for _, domainItem := range APIKey.Payload.Domains {
-				domains = append(domains, domainItem.Name)
-			}
-			sort.Strings(domains)
+	if d.Get("role").(string) == "User" && len(APIKey.Payload.Domains) > 0 {
+		for _, domainItem := range APIKey.Payload.Domains {
+			domains = append(domains, domainItem.Name)
 		}
-
 	}
 
 	d.Set("domains", domains)
@@ -147,18 +140,22 @@ func resourcePDNSAdminAPIKeyUpdate(d *schema.ResourceData, meta interface{}) err
 
 	if d.HasChange("description") || d.HasChange("domains") || d.HasChange("role") {
 
-		role := strings.Title(strings.ToLower(d.Get("role").(string)))
+		role := d.Get("role").(string)
 		setDomains := d.Get("domains").(*schema.Set).List()
 
-		if role == "User" && len(setDomains) == 0 {
+		_, n := d.GetChange("role")
+		newRole := strings.Title(strings.ToLower(n.(string)))
+
+		if d.HasChange("role") && newRole == "User" && len(setDomains) == 0 {
 			return fmt.Errorf("API Key with a User role must have at least one domain")
 		}
 
-		var domains models.PDNSAdminZones
-		if len(setDomains) == 0 {
+		if newRole != "User" {
+			setDomains = make([]interface{}, 0)
 			setDomains = append(setDomains, "\"\"")
 		}
 
+		var domains models.PDNSAdminZones
 		for _, domain := range setDomains {
 			domains = append(domains, &models.PDNSAdminZonesItems{Name: domain.(string)})
 		}
@@ -180,8 +177,8 @@ func resourcePDNSAdminAPIKeyUpdate(d *schema.ResourceData, meta interface{}) err
 		if updatedAPIKey == nil {
 			return fmt.Errorf("An unknown error occured while updating API Key %q", d.Id())
 		}
-		resourcePDNSAdminAPIKeyRead(d, meta)
 	}
+	resourcePDNSAdminAPIKeyRead(d, meta)
 	return nil
 }
 
