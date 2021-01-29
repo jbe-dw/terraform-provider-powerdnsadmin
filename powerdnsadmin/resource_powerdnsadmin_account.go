@@ -82,7 +82,8 @@ func resourcePDNSAdminAccountCreate(d *schema.ResourceData, meta interface{}) er
 		return err
 	}
 
-	d.SetId(strconv.FormatInt(createdAccount.Payload.ID, 10))
+	//d.SetId(strconv.FormatInt(createdAccount.Payload.ID, 10))
+	d.SetId(createdAccount.Payload.Name)
 	resourcePDNSAdminAccountRead(d, meta)
 
 	return nil
@@ -91,7 +92,7 @@ func resourcePDNSAdminAccountCreate(d *schema.ResourceData, meta interface{}) er
 func resourcePDNSAdminAccountRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*pdnsaclient.Pdnsadmin)
 
-	AccountName := d.Get("name").(string)
+	AccountName := d.Id()
 	log.Printf("[DEBUG] Reading PowerDNS Admin Account: %s", AccountName)
 	resource := user.NewAPIGetAccountByNameParams().WithAccountName(AccountName)
 	Account, err := client.User.APIGetAccountByName(resource, nil)
@@ -102,6 +103,7 @@ func resourcePDNSAdminAccountRead(d *schema.ResourceData, meta interface{}) erro
 	d.Set("description", Account.Payload.Description)
 	d.Set("contact_name", Account.Payload.Contact)
 	d.Set("contact_mail", Account.Payload.Mail)
+	d.Set("name", Account.Payload.Name)
 
 	return nil
 }
@@ -111,7 +113,6 @@ func resourcePDNSAdminAccountUpdate(d *schema.ResourceData, meta interface{}) er
 
 	if d.HasChange("description") || d.HasChange("contact_name") || d.HasChange("contact_email") {
 
-		AccountName := d.Get("name").(string)
 		AccountID, err := strconv.ParseInt(d.Id(), 10, 64)
 
 		Account := &models.APIUpdateAccountParamsBody{
@@ -127,7 +128,7 @@ func resourcePDNSAdminAccountUpdate(d *schema.ResourceData, meta interface{}) er
 		}
 
 		if updatedAccount == nil {
-			return fmt.Errorf("An unknown error occured while updating Acount %s", AccountName)
+			return fmt.Errorf("An unknown error occured while updating Acount %s", AccountID)
 		}
 		resourcePDNSAdminAccountRead(d, meta)
 	}
@@ -137,19 +138,18 @@ func resourcePDNSAdminAccountUpdate(d *schema.ResourceData, meta interface{}) er
 func resourcePDNSAdminAccountDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*pdnsaclient.Pdnsadmin)
 
-	AccountName := d.Get("name").(string)
 	AccountID, err := strconv.ParseInt(d.Id(), 10, 64)
 
-	log.Printf("[DEBUG] Deleting PowerDNS Admin Account: %s", AccountName)
+	log.Printf("[DEBUG] Deleting PowerDNS Admin Account: %s", AccountID)
 
 	resource := user.NewAPIDeleteAccountParams().WithAccountID(AccountID)
 	Account, err := client.User.APIDeleteAccount(resource, nil)
 	if err != nil {
-		return fmt.Errorf("Couldn't delete PowerDNS Admin Account (%s): %s", AccountName, err)
+		return fmt.Errorf("Couldn't delete PowerDNS Admin Account (%s): %s", AccountID, err)
 	}
 
 	if Account == nil {
-		return fmt.Errorf("An unknown error occured while deleting Account (%s): %s", AccountName, err)
+		return fmt.Errorf("An unknown error occured while deleting Account (%s): %s", AccountID, err)
 	}
 	return nil
 }
