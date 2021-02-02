@@ -29,6 +29,12 @@ func (o *APIGetApikeyByIDReader) ReadResponse(response runtime.ClientResponse, c
 			return nil, err
 		}
 		return result, nil
+	case 403:
+		result := NewAPIGetApikeyByIDForbidden()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
 	case 404:
 		result := NewAPIGetApikeyByIDNotFound()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -76,6 +82,27 @@ func (o *APIGetApikeyByIDOK) readResponse(response runtime.ClientResponse, consu
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewAPIGetApikeyByIDForbidden creates a APIGetApikeyByIDForbidden with default headers values
+func NewAPIGetApikeyByIDForbidden() *APIGetApikeyByIDForbidden {
+	return &APIGetApikeyByIDForbidden{}
+}
+
+/*APIGetApikeyByIDForbidden handles this case with default header values.
+
+The authenticated user has User role and is not allowed on any of the domains assigned to the key
+*/
+type APIGetApikeyByIDForbidden struct {
+}
+
+func (o *APIGetApikeyByIDForbidden) Error() string {
+	return fmt.Sprintf("[GET /pdnsadmin/apikeys/{apikey_id}][%d] apiGetApikeyByIdForbidden ", 403)
+}
+
+func (o *APIGetApikeyByIDForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

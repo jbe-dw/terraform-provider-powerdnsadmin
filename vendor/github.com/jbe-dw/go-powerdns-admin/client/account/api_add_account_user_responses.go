@@ -60,7 +60,7 @@ type APIAddAccountUserNoContent struct {
 }
 
 func (o *APIAddAccountUserNoContent) Error() string {
-	return fmt.Sprintf("[PUT /pdnsadmin/accounts/users/{account_id}/{user_id}][%d] apiAddAccountUserNoContent ", 204)
+	return fmt.Sprintf("[PUT /pdnsadmin/accounts/{account_id}/users/{user_id}][%d] apiAddAccountUserNoContent ", 204)
 }
 
 func (o *APIAddAccountUserNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -82,7 +82,7 @@ type APIAddAccountUserNotFound struct {
 }
 
 func (o *APIAddAccountUserNotFound) Error() string {
-	return fmt.Sprintf("[PUT /pdnsadmin/accounts/users/{account_id}/{user_id}][%d] apiAddAccountUserNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[PUT /pdnsadmin/accounts/{account_id}/users/{user_id}][%d] apiAddAccountUserNotFound  %+v", 404, o.Payload)
 }
 
 func (o *APIAddAccountUserNotFound) GetPayload() *models.Error {
@@ -115,7 +115,7 @@ type APIAddAccountUserInternalServerError struct {
 }
 
 func (o *APIAddAccountUserInternalServerError) Error() string {
-	return fmt.Sprintf("[PUT /pdnsadmin/accounts/users/{account_id}/{user_id}][%d] apiAddAccountUserInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[PUT /pdnsadmin/accounts/{account_id}/users/{user_id}][%d] apiAddAccountUserInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *APIAddAccountUserInternalServerError) GetPayload() *models.Error {

@@ -54,14 +54,14 @@ func NewAPIListAccountUsersOK() *APIListAccountUsersOK {
 
 /*APIListAccountUsersOK handles this case with default header values.
 
-List of User objects
+List of Summarized User objects
 */
 type APIListAccountUsersOK struct {
 	Payload []*models.User
 }
 
 func (o *APIListAccountUsersOK) Error() string {
-	return fmt.Sprintf("[GET /pdnsadmin/accounts/users/{account_id}][%d] apiListAccountUsersOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /pdnsadmin/accounts/{account_id}/users][%d] apiListAccountUsersOK  %+v", 200, o.Payload)
 }
 
 func (o *APIListAccountUsersOK) GetPayload() []*models.User {
@@ -92,7 +92,7 @@ type APIListAccountUsersNotFound struct {
 }
 
 func (o *APIListAccountUsersNotFound) Error() string {
-	return fmt.Sprintf("[GET /pdnsadmin/accounts/users/{account_id}][%d] apiListAccountUsersNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[GET /pdnsadmin/accounts/{account_id}/users][%d] apiListAccountUsersNotFound  %+v", 404, o.Payload)
 }
 
 func (o *APIListAccountUsersNotFound) GetPayload() *models.Error {
@@ -125,7 +125,7 @@ type APIListAccountUsersInternalServerError struct {
 }
 
 func (o *APIListAccountUsersInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /pdnsadmin/accounts/users/{account_id}][%d] apiListAccountUsersInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[GET /pdnsadmin/accounts/{account_id}/users][%d] apiListAccountUsersInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *APIListAccountUsersInternalServerError) GetPayload() *models.Error {

@@ -60,7 +60,7 @@ type APIRemoveAccountUserNoContent struct {
 }
 
 func (o *APIRemoveAccountUserNoContent) Error() string {
-	return fmt.Sprintf("[DELETE /pdnsadmin/accounts/users/{account_id}/{user_id}][%d] apiRemoveAccountUserNoContent ", 204)
+	return fmt.Sprintf("[DELETE /pdnsadmin/accounts/{account_id}/users/{user_id}][%d] apiRemoveAccountUserNoContent ", 204)
 }
 
 func (o *APIRemoveAccountUserNoContent) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -82,7 +82,7 @@ type APIRemoveAccountUserNotFound struct {
 }
 
 func (o *APIRemoveAccountUserNotFound) Error() string {
-	return fmt.Sprintf("[DELETE /pdnsadmin/accounts/users/{account_id}/{user_id}][%d] apiRemoveAccountUserNotFound  %+v", 404, o.Payload)
+	return fmt.Sprintf("[DELETE /pdnsadmin/accounts/{account_id}/users/{user_id}][%d] apiRemoveAccountUserNotFound  %+v", 404, o.Payload)
 }
 
 func (o *APIRemoveAccountUserNotFound) GetPayload() *models.Error {
@@ -115,7 +115,7 @@ type APIRemoveAccountUserInternalServerError struct {
 }
 
 func (o *APIRemoveAccountUserInternalServerError) Error() string {
-	return fmt.Sprintf("[DELETE /pdnsadmin/accounts/users/{account_id}/{user_id}][%d] apiRemoveAccountUserInternalServerError  %+v", 500, o.Payload)
+	return fmt.Sprintf("[DELETE /pdnsadmin/accounts/{account_id}/users/{user_id}][%d] apiRemoveAccountUserInternalServerError  %+v", 500, o.Payload)
 }
 
 func (o *APIRemoveAccountUserInternalServerError) GetPayload() *models.Error {

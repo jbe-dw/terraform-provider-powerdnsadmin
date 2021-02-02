@@ -35,7 +35,7 @@ type APIKey struct {
 	PlainKey string `json:"plain_key,omitempty"`
 
 	// role
-	Role *PDNSAdminAPIKeyRole `json:"role,omitempty"`
+	Role *PDNSAdminRole `json:"role,omitempty"`
 }
 
 // Validate validates this Api key

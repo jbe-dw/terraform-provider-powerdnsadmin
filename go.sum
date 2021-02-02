@@ -295,6 +295,10 @@ github.com/imdario/mergo v0.3.9/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJ
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/jbe-dw/go-powerdns-admin v0.0.0-20210111141417-a80ce715d23a h1:TvHrDh0VMr12zTexh6DxDCON+Ggr99UKypd4n/wL41c=
 github.com/jbe-dw/go-powerdns-admin v0.0.0-20210111141417-a80ce715d23a/go.mod h1:ceiB94DVblYBPcAySuQeQKrn0dL8EKPSsX4jzDrlYIU=
+github.com/jbe-dw/go-powerdns-admin v0.0.0-20210201134516-45630d27500b h1:+TuGXyIKnpAehepgOBenB1UDnFuNC5LU6JBXcTQSnIs=
+github.com/jbe-dw/go-powerdns-admin v0.0.0-20210201134516-45630d27500b/go.mod h1:ceiB94DVblYBPcAySuQeQKrn0dL8EKPSsX4jzDrlYIU=
+github.com/jbe-dw/go-powerdns-admin v0.0.0-20210201220009-0106310895cc h1:FKnTsRlhlsGvYPV7Rki7eb8GNqQCpKr5viEttpnCZOU=
+github.com/jbe-dw/go-powerdns-admin v0.0.0-20210201220009-0106310895cc/go.mod h1:ceiB94DVblYBPcAySuQeQKrn0dL8EKPSsX4jzDrlYIU=
 github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99/go.mod h1:1lJo3i6rXxKeerYnT8Nvf0QmHCRC1n8sfWVwXF2Frvo=
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/jhump/protoreflect v1.6.0/go.mod h1:eaTn3RZAmMBcV0fifFvlm6VHNz3wSkYyXYWUh7ymB74=

@@ -91,7 +91,7 @@ func resourcePDNSAdminAPIKeyCreate(d *schema.ResourceData, meta interface{}) err
 	Apikey := &models.APIKey{
 		Description: d.Get("description").(string),
 		Domains:     domains,
-		Role:        &models.PDNSAdminAPIKeyRole{Name: role},
+		Role:        &models.PDNSAdminRole{Name: role},
 	}
 
 	resource := apikey.NewAPIGenerateApikeyParams().WithApikey(Apikey)
@@ -102,9 +102,7 @@ func resourcePDNSAdminAPIKeyCreate(d *schema.ResourceData, meta interface{}) err
 
 	d.SetId(strconv.FormatInt(createdAPIKey.Payload.ID, 10))
 	d.Set("plain_text_key", createdAPIKey.Payload.PlainKey)
-	resourcePDNSAdminAPIKeyRead(d, meta)
-
-	return nil
+	return resourcePDNSAdminAPIKeyRead(d, meta)
 }
 
 func resourcePDNSAdminAPIKeyRead(d *schema.ResourceData, meta interface{}) error {
@@ -163,7 +161,7 @@ func resourcePDNSAdminAPIKeyUpdate(d *schema.ResourceData, meta interface{}) err
 		Apikey := &models.APIKey{
 			Description: d.Get("description").(string),
 			Domains:     domains,
-			Role:        &models.PDNSAdminAPIKeyRole{Name: role},
+			Role:        &models.PDNSAdminRole{Name: role},
 		}
 
 		ApikeyID, err := strconv.ParseInt(d.Id(), 10, 64)
@@ -178,8 +176,7 @@ func resourcePDNSAdminAPIKeyUpdate(d *schema.ResourceData, meta interface{}) err
 			return fmt.Errorf("An unknown error occured while updating API Key %q", d.Id())
 		}
 	}
-	resourcePDNSAdminAPIKeyRead(d, meta)
-	return nil
+	return resourcePDNSAdminAPIKeyRead(d, meta)
 }
 
 func resourcePDNSAdminAPIKeyDelete(d *schema.ResourceData, meta interface{}) error {

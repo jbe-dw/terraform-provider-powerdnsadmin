@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -59,6 +58,10 @@ func resourcePDNSAdminAccount() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
+			"accountid": {
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
 		},
 	}
 }
@@ -82,11 +85,9 @@ func resourcePDNSAdminAccountCreate(d *schema.ResourceData, meta interface{}) er
 		return err
 	}
 
-	//d.SetId(strconv.FormatInt(createdAccount.Payload.ID, 10))
 	d.SetId(createdAccount.Payload.Name)
-	resourcePDNSAdminAccountRead(d, meta)
-
-	return nil
+	d.Set("accountid", createdAccount.Payload.ID)
+	return resourcePDNSAdminAccountRead(d, meta)
 }
 
 func resourcePDNSAdminAccountRead(d *schema.ResourceData, meta interface{}) error {
@@ -104,6 +105,7 @@ func resourcePDNSAdminAccountRead(d *schema.ResourceData, meta interface{}) erro
 	d.Set("contact_name", Account.Payload.Contact)
 	d.Set("contact_mail", Account.Payload.Mail)
 	d.Set("name", Account.Payload.Name)
+	d.Set("accountid", Account.Payload.ID)
 
 	return nil
 }
@@ -113,7 +115,7 @@ func resourcePDNSAdminAccountUpdate(d *schema.ResourceData, meta interface{}) er
 
 	if d.HasChange("description") || d.HasChange("contact_name") || d.HasChange("contact_email") {
 
-		AccountID, err := strconv.ParseInt(d.Id(), 10, 64)
+		AccountID := int64(d.Get("accountid").(int))
 
 		Account := &models.APIUpdateAccountParamsBody{
 			Contact:     d.Get("contact_name").(string),
@@ -130,7 +132,7 @@ func resourcePDNSAdminAccountUpdate(d *schema.ResourceData, meta interface{}) er
 		if updatedAccount == nil {
 			return fmt.Errorf("An unknown error occured while updating Acount %s", AccountID)
 		}
-		resourcePDNSAdminAccountRead(d, meta)
+		return resourcePDNSAdminAccountRead(d, meta)
 	}
 	return nil
 }
@@ -138,7 +140,7 @@ func resourcePDNSAdminAccountUpdate(d *schema.ResourceData, meta interface{}) er
 func resourcePDNSAdminAccountDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*pdnsaclient.Pdnsadmin)
 
-	AccountID, err := strconv.ParseInt(d.Id(), 10, 64)
+	AccountID := int64(d.Get("accountid").(int))
 
 	log.Printf("[DEBUG] Deleting PowerDNS Admin Account: %s", AccountID)
 

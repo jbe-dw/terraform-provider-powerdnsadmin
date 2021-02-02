@@ -57,20 +57,20 @@ func NewAPIGetUserOK() *APIGetUserOK {
 Retrieve a specific User
 */
 type APIGetUserOK struct {
-	Payload *models.User
+	Payload *models.UserDetailed
 }
 
 func (o *APIGetUserOK) Error() string {
 	return fmt.Sprintf("[GET /pdnsadmin/users/{username}][%d] apiGetUserOK  %+v", 200, o.Payload)
 }
 
-func (o *APIGetUserOK) GetPayload() *models.User {
+func (o *APIGetUserOK) GetPayload() *models.UserDetailed {
 	return o.Payload
 }
 
 func (o *APIGetUserOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(models.User)
+	o.Payload = new(models.UserDetailed)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {

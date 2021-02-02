@@ -50,6 +50,7 @@ func Provider() terraform.ResourceProvider {
 		ResourcesMap: map[string]*schema.Resource{
 			"powerdnsadmin_apikey":  resourcePDNSAdminAPIKey(),
 			"powerdnsadmin_account": resourcePDNSAdminAccount(),
+			"powerdnsadmin_user":    resourcePDNSAdminUser(),
 		},
 
 		ConfigureFunc: providerConfigure,

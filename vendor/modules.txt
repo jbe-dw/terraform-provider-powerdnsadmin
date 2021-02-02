@@ -201,7 +201,7 @@ github.com/hashicorp/terraform-svchost/auth
 github.com/hashicorp/terraform-svchost/disco
 # github.com/hashicorp/yamux v0.0.0-20181012175058-2f1d1f20f75d
 github.com/hashicorp/yamux
-# github.com/jbe-dw/go-powerdns-admin v0.0.0-20210111141417-a80ce715d23a
+# github.com/jbe-dw/go-powerdns-admin v0.0.0-20210201220009-0106310895cc
 ## explicit
 github.com/jbe-dw/go-powerdns-admin/client
 github.com/jbe-dw/go-powerdns-admin/client/account

@@ -52,7 +52,7 @@ func (a *Client) APIAddAccountUser(params *APIAddAccountUserParams, authInfo run
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "api_add_account_user",
 		Method:             "PUT",
-		PathPattern:        "/pdnsadmin/accounts/users/{account_id}/{user_id}",
+		PathPattern:        "/pdnsadmin/accounts/{account_id}/users/{user_id}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
@@ -124,7 +124,7 @@ func (a *Client) APIListAccountUsers(params *APIListAccountUsersParams, authInfo
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "api_list_account_users",
 		Method:             "GET",
-		PathPattern:        "/pdnsadmin/accounts/users/{account_id}",
+		PathPattern:        "/pdnsadmin/accounts/{account_id}/users",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
@@ -194,7 +194,7 @@ func (a *Client) APIRemoveAccountUser(params *APIRemoveAccountUserParams, authIn
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "api_remove_account_user",
 		Method:             "DELETE",
-		PathPattern:        "/pdnsadmin/accounts/users/{account_id}/{user_id}",
+		PathPattern:        "/pdnsadmin/accounts/{account_id}/users/{user_id}",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},

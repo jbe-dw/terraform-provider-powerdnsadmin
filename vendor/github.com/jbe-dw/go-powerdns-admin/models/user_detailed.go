@@ -6,17 +6,22 @@ package models
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"strconv"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
 
-// User User
+// UserDetailed User
 //
 // User that can access the gui/api
 //
-// swagger:model User
-type User struct {
+// swagger:model UserDetailed
+type UserDetailed struct {
+
+	// accounts
+	Accounts []*AccountSummary `json:"accounts"`
 
 	// The confirmed status
 	Confirmed bool `json:"confirmed,omitempty"`
@@ -47,9 +52,13 @@ type User struct {
 	Username string `json:"username,omitempty"`
 }
 
-// Validate validates this user
-func (m *User) Validate(formats strfmt.Registry) error {
+// Validate validates this user detailed
+func (m *UserDetailed) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateAccounts(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateRole(formats); err != nil {
 		res = append(res, err)
@@ -61,7 +70,32 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validateRole(formats strfmt.Registry) error {
+func (m *UserDetailed) validateAccounts(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Accounts) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Accounts); i++ {
+		if swag.IsZero(m.Accounts[i]) { // not required
+			continue
+		}
+
+		if m.Accounts[i] != nil {
+			if err := m.Accounts[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName("accounts" + "." + strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+func (m *UserDetailed) validateRole(formats strfmt.Registry) error {
 
 	if swag.IsZero(m.Role) { // not required
 		return nil
@@ -80,7 +114,7 @@ func (m *User) validateRole(formats strfmt.Registry) error {
 }
 
 // MarshalBinary interface implementation
-func (m *User) MarshalBinary() ([]byte, error) {
+func (m *UserDetailed) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -88,8 +122,8 @@ func (m *User) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *User) UnmarshalBinary(b []byte) error {
-	var res User
+func (m *UserDetailed) UnmarshalBinary(b []byte) error {
+	var res UserDetailed
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
